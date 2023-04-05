@@ -7,7 +7,6 @@ import (
 	"math"
 	"strings"
 	"sync"
-	"time"
 
 	cf "github.com/dogasantos/cloudfinder/pkg/runner"
 )
@@ -51,20 +50,17 @@ func main() {
 		}
 
 		wg := new(sync.WaitGroup)
-		routinescounter := 0
-		for _, target := range targets {
-			target = strings.ReplaceAll(target, " ", "")
-			if len(target) > 1 {
-				wg.Add(1)
-				go cf.Start(target, options.Verbose, wg)
-				if routinescounter == int(math.Round(float64(len(targets)) / 10))  {
-					time.Sleep(5 * time.Second)
-					routinescounter = 0
-				} else {
-					routinescounter = routinescounter+1
-				}
-			}
+
+		for i := 0; i < int(math.Round(float64(len(targets)) / 10)) ; i++ {
+			wg.Add(1)
+			go func() {
+					defer wg.Done()
+					for _, target := range targets {
+						cf.Start(target, options.Verbose, wg)
+					}
+			}()
 		}
+		
 		wg.Wait()
 	}
 
