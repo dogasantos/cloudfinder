@@ -54,7 +54,7 @@ func Resolver(name string) []net.IP {
 }
 
 
-func start(target string, verbose bool, wg *sync.WaitGroup) {
+func Start(target string, verbose bool, wg *sync.WaitGroup) {
 	var host string
 
 	client, err := cdncheck.NewWithCache()
