@@ -4,9 +4,11 @@ package cloudfinder
 import(
 	"github.com/projectdiscovery/cdncheck"
 	"github.com/projectdiscovery/dnsx/libs/dnsx"
-	"net"
-	"net/url"
 	"github.com/bobesa/go-domain-util/domainutil"
+	"log"
+	"sync"
+	"strings"
+
 
 
 )
@@ -25,6 +27,10 @@ func ParseUrlTokens(value string) (*DomainTokens){
 	d.Domain = domainutil.Domain(value)
 	d.Tld = domainutil.DomainSuffix(value)
 	return &d
+}
+
+func isURL(candidate string) bool {
+	return strings.Contains(candidate, "://")
 }
 
 func Resolver(string) []net.IP {
@@ -58,7 +64,7 @@ func cloudfinder(target string, verbose bool, wg *sync.WaitGroup) {
 			log.Fatal(err)
 	}
 	if isURL(target) {
-		htok = ParseUrlTokens(target)
+		htok := ParseUrlTokens(target)
 		host = htok.Subdomain + "." + htok.Domain
 	} else {
 		host = target
