@@ -8,9 +8,7 @@ import(
 	"log"
 	"sync"
 	"strings"
-
-
-
+	"net"
 )
 
 type DomainTokens struct {
@@ -33,7 +31,7 @@ func isURL(candidate string) bool {
 	return strings.Contains(candidate, "://")
 }
 
-func Resolver(string) []net.IP {
+func Resolver(name string) []net.IP {
 	resolver, err := dnsx.New(dnsx.DefaultOptions)
 	if err != nil {
 			log.Fatal(err)
