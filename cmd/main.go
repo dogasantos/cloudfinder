@@ -9,7 +9,7 @@ import (
 	"sync"
 	"time"
 
-	cloudfinder "github.com/dogasantos/cloudfinder/pkg/runner"
+	cf "github.com/dogasantos/cloudfinder/pkg/runner"
 )
 
 
@@ -56,7 +56,7 @@ func main() {
 			target = strings.ReplaceAll(target, " ", "")
 			if len(target) > 1 {
 				wg.Add(1)
-				go cloudfinder.start(target, options.Verbose, wg)
+				go cf.start(target, options.Verbose, wg)
 				if routinescounter == int(math.Round(float64(len(targets)) / 10))  {
 					time.Sleep(5 * time.Second)
 					routinescounter = 0
